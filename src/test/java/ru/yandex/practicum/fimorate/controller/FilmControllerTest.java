@@ -84,7 +84,8 @@ class FilmControllerTest {
         Film checkFilm = controller.createFilm(film);
         final ValidationException exception = assertThrows(ValidationException.class, () -> controller
                 .createFilm(checkFilm));
-        assertEquals("Такой фильм уже есть в базе!", exception.getMessage());
+        String checkMessage = "Фильм с id " + film.getId() + " уже существует";
+        assertEquals(checkMessage, exception.getMessage());
     }
 
     @Test

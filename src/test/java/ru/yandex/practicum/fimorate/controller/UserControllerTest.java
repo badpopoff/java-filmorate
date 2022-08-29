@@ -22,19 +22,19 @@ class UserControllerTest {
 
     @Test
     void shouldGetExceptionIfUserHasNotAtInEmail() {
-        User user = new User("user1.usersandex.ru", "Login", LocalDate.of(2006, 10
-                , 10));
+        User user = new User("user1.usersandex.ru", "Login", LocalDate.of(2006, 10,
+                10));
         user.setName("Name");
 
-        final ValidationException exception = assertThrows(ValidationException.class
-                , () -> new UserController().create(user));
+        final ValidationException exception = assertThrows(ValidationException.class,
+                () -> new UserController().create(user));
         assertEquals("Электронная почта должна содержать символ @.", exception.getMessage());
     }
 
     @Test
     void shouldGetExceptionIfUserHasNotLogin() {
-        User user = new User("user1.users@yandex.ru", "", LocalDate.of(2006, 10
-                , 10));
+        User user = new User("user1.users@yandex.ru", "", LocalDate.of(2006, 10,
+                10));
         user.setName("Name");
 
         final ValidationException exception = assertThrows(ValidationException.class
@@ -44,12 +44,12 @@ class UserControllerTest {
 
     @Test
     void shouldGetExceptionIfLoginContainsBlanks() {
-        User user = new User("user1.users@yandex.ru", "Login 1", LocalDate.of(2006, 10
-                , 10));
+        User user = new User("user1.users@yandex.ru", "Login 1", LocalDate.of(2006, 10,
+                10));
         user.setName("Name");
 
-        final ValidationException exception = assertThrows(ValidationException.class
-                , () -> new UserController().create(user));
+        final ValidationException exception = assertThrows(ValidationException.class,
+                () -> new UserController().create(user));
         assertEquals("Логин не может содержать пробелы!", exception.getMessage());
     }
 
@@ -76,14 +76,14 @@ class UserControllerTest {
 
     @Test
     void shouldGetExceptionIfYouCreateUserAlreadyRegistered() {
-        User user = new User("user1.users@yandex.ru", "Login1", LocalDate.of(2006, 10
-                , 10));
+        User user = new User("user1.users@yandex.ru", "Login1", LocalDate.of(2006, 10,
+                10));
         user.setName("Name");
         UserController controller = new UserController();
         User checkUser = controller.create(user);
 
-        final ValidationException exception = assertThrows(ValidationException.class
-                , () -> controller.create(checkUser));
+        final ValidationException exception = assertThrows(ValidationException.class,
+                () -> controller.create(checkUser));
         String checkText = "Пользователь с электронной почтой уже зарегистрирован!";
         assertEquals(checkText, exception.getMessage());
     }
