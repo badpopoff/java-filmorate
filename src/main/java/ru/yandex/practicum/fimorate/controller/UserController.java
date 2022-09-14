@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User findFilmById(@PathVariable Integer id) {
+    public User findUserById(@PathVariable Integer id) {
         return userService.getById(id);
     }
 
@@ -46,9 +46,9 @@ public class UserController {
     }
 
     @PutMapping
-    public User put(@Valid @RequestBody User user) {
+    public User addFriend(@Valid @RequestBody User user) {
         validateUser(user);
-        return userService.put(user);
+        return userService.updateUser(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
@@ -68,7 +68,7 @@ public class UserController {
             throw new ValidationException(message);
         }
         if (!user.getEmail().contains("@")) {
-            String message = "Электронная почта должна содержать символ @.";
+            String message = "Электронная почта должна содержать символ @. Значение: " + user.getEmail();
             log.error(message);
             throw new ValidationException(message);
         }
@@ -78,7 +78,7 @@ public class UserController {
             throw new ValidationException(message);
         }
         if (user.getLogin().contains(" ")) {
-            String message = "Логин не может содержать пробелы!";
+            String message = "Логин не может содержать пробелы! Значение: " + user.getLogin();
             log.error(message);
             throw new ValidationException(message);
         }
@@ -87,7 +87,7 @@ public class UserController {
             user.setName(user.getLogin());
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            String message = "Дата рождения не может быть в будущем!";
+            String message = "Дата рождения не может быть в будущем! Значение: " + user.getBirthday();
             log.error(message);
             throw new ValidationException(message);
         }

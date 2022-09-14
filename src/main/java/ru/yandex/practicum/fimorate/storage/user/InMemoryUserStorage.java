@@ -37,7 +37,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User put(User user) {
+    public User updateUser(User user) {
         if (!users.containsKey(user.getId())) {
             String message = String.format(
                     "Пользователь с электронной почтой %s не зарегистрирован!",
@@ -50,19 +50,19 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getById (int id){
-       if (!users.containsKey(id)){
-           String message = String.format(
-                   "Пользователь с id %d не зарегистрирован!",
-                   id);
-           log.error(message);
-           throw new NotFoundException(message);
-       }
-       return users.get(id);
+    public User getById(int id) {
+        if (!users.containsKey(id)) {
+            String message = String.format(
+                    "Пользователь с id %d не зарегистрирован!",
+                    id);
+            log.error(message);
+            throw new NotFoundException(message);
+        }
+        return users.get(id);
     }
 
     @Override
-    public Collection<User> findAll(){
+    public Collection<User> findAll() {
         return users.values();
     }
 }

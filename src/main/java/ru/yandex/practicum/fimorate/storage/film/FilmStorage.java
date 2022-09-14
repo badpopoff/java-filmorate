@@ -4,10 +4,10 @@ import ru.yandex.practicum.fimorate.model.Film;
 
 import java.util.Collection;
 
-public interface FilmStorage{
+public interface FilmStorage {
     Film createFilm(Film film);
 
-    Film put(Film film);
+    Film updateFilm(Film film);
 
     Collection<Film> findAll();
 

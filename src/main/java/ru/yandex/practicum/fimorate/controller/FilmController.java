@@ -19,6 +19,7 @@ import java.util.List;
 public class FilmController {
     private static final LocalDate FIRST_FILM_CREATION_DATE = LocalDate.of(1895, 12, 28);
     private static final int MAX_DESCRIPTION_LENGTH = 200;
+    private  static final String DEFAULT_TOP_LIST_SIZE = "10";
     private final FilmService filmService;
 
     @GetMapping()
@@ -32,7 +33,7 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Film> findPopular(@RequestParam(required = false, defaultValue = "10") String count) {
+    public List<Film> findPopular(@RequestParam(required = false, defaultValue = DEFAULT_TOP_LIST_SIZE) String count) {
         return filmService.findPopularFilms(Integer.parseInt(count));
     }
 
@@ -45,7 +46,7 @@ public class FilmController {
     @PutMapping()
     public Film put(@Valid @RequestBody Film film) {
         validateFilm(film);
-        return filmService.put(film);
+        return filmService.updateFilm(film);
     }
 
     @PutMapping("/{id}/like/{userId}")
@@ -71,12 +72,13 @@ public class FilmController {
             throw new ValidationException(message);
         }
         if (film.getDuration() < 0) {
-            String message = "Ошибка ввода! Продолжительность дожна быть больше нуля!";
+            String message = "Ошибка ввода! Продолжительность дожна быть больше нуля! Значение: " + film.getDuration();
             log.error(message);
             throw new ValidationException(message);
         }
         if (film.getReleaseDate().isBefore(FIRST_FILM_CREATION_DATE)) {
-            String message = "Ошибка ввода! Дата релиза должна быть позже 28 декабря 1895 года!";
+            String message = "Ошибка ввода! Дата релиза должна быть позже 28 декабря 1895 года! Значение: " +
+                    film.getReleaseDate();
             log.error(message);
             throw new ValidationException(message);
         }

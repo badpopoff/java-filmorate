@@ -1,38 +1,58 @@
 package ru.yandex.practicum.fimorate.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.fimorate.model.Film;
+import ru.yandex.practicum.fimorate.storage.film.FilmStorage;
 import ru.yandex.practicum.fimorate.storage.film.InMemoryFilmStorage;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FilmService extends InMemoryFilmStorage{
+@AllArgsConstructor
+public class FilmService implements FilmStorage {
     private final UserService userService;
+    private InMemoryFilmStorage filmStorage;
 
-    @Autowired
-    public FilmService(UserService userService) {
-        this.userService = userService;
+    @Override
+    public Film createFilm(Film film) {
+        return filmStorage.createFilm(film);
+    }
+
+    @Override
+    public Film updateFilm(Film film) {
+        return filmStorage.updateFilm(film);
+    }
+
+    @Override
+    public Collection<Film> findAll() {
+        return filmStorage.findAll();
+    }
+
+    @Override
+    public Film getFilmById(int id) {
+        return filmStorage.getFilmById(id);
     }
 
     public void setLike(int id, int userId) {
-        Film film = super.getFilmById(id);
+        Film film = filmStorage.getFilmById(id);
         userService.getById(userId);
-        film.getIdLikeUsers().add(userId);
+        film.getLikedUsers().add(userId);
     }
 
     public void deleteLike(int id, int userId) {
-        Film film = super.getFilmById(id);
+        Film film = filmStorage.getFilmById(id);
         userService.getById(userId);
-        film.getIdLikeUsers().remove(userId);
+        film.getLikedUsers().remove(userId);
     }
 
     public List<Film> findPopularFilms(int size) {
-        List<Film> films = super.findAll().stream().
-                sorted((f0, f1) -> f1.getIdLikeUsers().size() - f0.getIdLikeUsers().size()).
-                limit(size).collect(Collectors.toList());
-        return films;
+        return filmStorage.findAll()
+                .stream()
+                .sorted((f0, f1) -> f1.getLikedUsers().size() - f0.getLikedUsers().size())
+                .limit(size)
+                .collect(Collectors.toList());
     }
 }

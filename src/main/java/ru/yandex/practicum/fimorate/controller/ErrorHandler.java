@@ -23,12 +23,12 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleFilmNotFound(final NotFoundException e) {
-        return new ErrorResponse("Ошибка данных!", e.getMessage());
+        return new ErrorResponse("Фильм не найден!", e.getMessage());
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class})
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleFilmNotFound(final RuntimeException e) {
+    public ErrorResponse handleIncorrectData(final IllegalArgumentException e) {
         return new ErrorResponse("Ошибка данных!", e.getMessage());
     }
 }
